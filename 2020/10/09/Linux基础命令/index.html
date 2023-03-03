@@ -1,178 +1,281 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Linux基础命令 - 昊的博客</title>
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="google" content="notranslate" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="HaoDuck">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、linux基础    1、shell指令        pwd:显示当前用户所在的绝对路径            绝对路径：从根目录开始描述的一条路径            相对路径：相对用户当前所在的一条路径     cd：目录跳转         用法：             cd + 要跳转到的路径              ls：列出当前用户所在目录的所有文件(不包含隐藏文件)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux基础命令">
+<meta property="og:url" content="http://example.com/2020/10/09/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="HaoDuck个人博客">
+<meta property="og:description" content="一、linux基础    1、shell指令        pwd:显示当前用户所在的绝对路径            绝对路径：从根目录开始描述的一条路径            相对路径：相对用户当前所在的一条路径     cd：目录跳转         用法：             cd + 要跳转到的路径              ls：列出当前用户所在目录的所有文件(不包含隐藏文件)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-09T09:37:22.000Z">
+<meta property="article:modified_time" content="2021-08-02T03:50:02.093Z">
+<meta property="article:author" content="HaoDuck">
+<meta property="article:tag" content="LINUX">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux基础命令 - HaoDuck个人博客</title>
 
-  
-  
-  <meta name="description" content="一、linux基础    1、shell指令     ..."> 
-  
-  <meta name="author" content="昊"> 
-
-  
-    <link rel="icon" href="/images/icons/favicon-16x16.ico" type="image/png" sizes="16x16">
-  
-  
-    <link rel="icon" href="/images/icons/favicon-32x32.ico" type="image/png" sizes="32x32">
-  
-  
-    <link rel="apple-touch-icon" href="/images/icons/favicon-140x140.ico" sizes="180x180">
-  
-  
-    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
-  
-  
-    <meta rel="msapplication-TileImage" content="/images/icons/favicon-140x140.ico">
-    <meta rel="msapplication-TileColor" content="#000000">
-  
-
-  
-<link rel="stylesheet" href="/css/style.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  
-  
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_h1619vhl1nr.css">
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
-  
-  
-  
-<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
 
-  
-  
-  
-<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
 
-  
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
-  <script>
-    var CONFIG = window.CONFIG || {};
-    var ZHAOO = window.ZHAOO || {};
-    CONFIG = {
-      isHome: false,
-      fancybox: true,
-      pjax: false,
-      lazyload: {
-        enable: true,
-        loadingImage: '',
-      },
-      donate: {
-        enable: true,
-        alipay: 'https://s1.ax1x.com/2020/11/02/Br1mHU.jpg',
-        wechat: 'https://s1.ax1x.com/2020/11/02/Br1eBT.png'
-      },
-      motto: {
-        api: '',
-        default: '东隅已逝，桑榆非晚！'
-      },
-      galleries: {
-        enable: true
-      },
-      fab: {
-        enable: true,
-        alwaysShow: false
-      },
-      carrier: {
-        enable: true
-      },
-      daovoice: {
-        enable: true
-      }
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
+
 
   
 <meta name="generator" content="Hexo 6.3.0"></head>
-<body class="lock-screen">
-  <div class="loading"></div>
+
+
+<body>
   
 
+  <header>
+    
 
-<nav class="navbar">
-  <div class="left"></div>
-  <div class="center">Linux基础命令</div>
-  <div class="right">
-    <i class="iconfont iconmenu j-navbar-menu"></i>
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>HaoDuck个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
 </nav>
 
-  <nav class="menu">
-  <div class="menu-wrap">
-    <div class="menu-close">
-      <i class="iconfont iconbaseline-close-px"></i>
-    </div>
-    <ul class="menu-content">
-      
-      
-      
-      
-      <li class="menu-item"><a href="/ " class="underline"> 首页</a></li>
-      
-      
-      
-      
-      <li class="menu-item"><a href="/galleries " class="underline"> 相册</a></li>
-      
-      
-      
-      
-      <li class="menu-item"><a href="/archives " class="underline"> 归档</a></li>
-      
-      
-      
-      
-      <li class="menu-item"><a href="/tags " class="underline"> 标签</a></li>
-      
-      
-      
-      
-      <li class="menu-item"><a href="/categories " class="underline"> 分类</a></li>
-      
-      
-      
-      
-      <li class="menu-item"><a href="/about " class="underline"> 关于</a></li>
-      
-    </ul>
-    <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux基础命令"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-10-09 17:37" pubdate>
+          2020年10月9日 下午
+        </time>
+      </span>
+    
   </div>
-</nav>
-  <main id="main">
-  <div class="container" id="container">
-    <article class="article">
-  <div class="wrap">
-    <section class="head">
-  <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
-  <div class="head-mask">
-    <h1 class="head-title">Linux基础命令</h1>
-    <div class="head-info">
-      <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 09, 2020</span
-        class="post-info-item">
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          895 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1687</span>
     </div>
   </div>
-</section>
-    <section class="main">
-      <section class="content">
-        <p>一、linux基础<br>    1、shell指令<br>        pwd:显示当前用户所在的绝对路径<br>            绝对路径：从根目录开始描述的一条路径<br>            相对路径：相对用户当前所在的一条路径</p>
-<pre><code>    cd：目录跳转
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux基础命令</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>一、linux基础<br>    1、shell指令<br>        pwd:显示当前用户所在的绝对路径<br>            绝对路径：从根目录开始描述的一条路径<br>            相对路径：相对用户当前所在的一条路径</p>
+<pre><code class="hljs">    cd：目录跳转
         用法：
             cd + 要跳转到的路径
         
@@ -253,210 +356,372 @@
             ./可执行文件名
 </code></pre>
 
-      </section>
-      <section class="extra">
-        
-        <ul class="copyright">
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
   
-  <li><strong>本文作者：</strong>昊</li>
-  <li><strong>本文链接：</strong><a href="https://sangyufeiwanya.github.io/2020/10/09/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/index.html">https://sangyufeiwanya.github.io/2020/10/09/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/index.html</a></li>
-  <li><strong>版权声明：</strong>本博客所有文章均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
-      rel="external nofollow" target="_blank"> BY-NC-SA </a>许可协议，转载请注明出处！</li>
-  
-</ul>
-        
-        
-        <section class="donate">
-  <div class="qrcode">
-    <img   class="lazyload" data-original="https://s1.ax1x.com/2020/11/02/Br1mHU.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
-  </div>
-  <div class="icon">
-    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
-    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
-  </div>
-</section>
-        
-        
-  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LINUX/" rel="tag">LINUX</a></li></ul>
-
-        
-<nav class="nav">
-  
-    <a href="/2020/10/15/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/"><i class="iconfont iconleft"></i>linux网络编程基础</a>
-  
-  
-    <a href="/2020/09/13/nginx%E5%88%86%E7%A6%BB%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">nginx分离式配置文件<i class="iconfont iconright"></i></a>
-  
-</nav>
-
-      </section>
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
       
-      <section class="comments">
+
+<span class="category-chains">
   
-  <div class="btn" id="comments-btn">查看评论</div>
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
   
   
-</section>
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
       
-    </section>
-  </div>
-</article>
-  </div>
-</main>
-  <footer class="footer">
-  <div class="footer-social">
-    
-    
-    
-    
-    
-    <a href="tencent://message/?Menu=yes&uin=894519210 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
-      onMouseOut="this.style.color='#33333D'">
-      <i class="iconfont footer-social-item  iconQQ "></i>
-    </a>
-    
-    
-    
-    
-    
-    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
-      onMouseOut="this.style.color='#33333D'">
-      <i class="iconfont footer-social-item  iconwechat-fill "></i>
-    </a>
-    
-    
-    
-    
-    
-    <a href="https://www.instagram.com/izhaoo/ " target="_blank" onMouseOver="this.style.color= '#DA2E76'"
-      onMouseOut="this.style.color='#33333D'">
-      <i class="iconfont footer-social-item  iconinstagram "></i>
-    </a>
-    
-    
-    
-    
-    
-    <a href="https://github.com/izhaoo " target="_blank" onMouseOver="this.style.color= '#24292E'"
-      onMouseOut="this.style.color='#33333D'">
-      <i class="iconfont footer-social-item  icongithub-fill "></i>
-    </a>
-    
-    
-    
-    
-    
-    <a href="mailto:izhaoo@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
-      onMouseOut="this.style.color='#33333D'">
-      <i class="iconfont footer-social-item  iconmail"></i>
-    </a>
-    
-  </div>
-  <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
-</footer>
+        <a href="/tags/LINUX/">#LINUX</a>
+      
+    </div>
   
-      <div class="fab fab-plus">
-    <i class="iconfont iconplus"></i>
-  </div>
+</div>
+
+
+              
   
-  <div class="fab fab-daovoice">
-    <i class="iconfont iconcomment"></i>
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux基础命令</div>
+      <div>http://example.com/2020/10/09/Linux基础命令/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>HaoDuck</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年10月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
-  
-  <div class="fab fab-up">
-    <i class="iconfont iconcaret-up"></i>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/15/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="linux网络编程基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">linux网络编程基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/09/13/nginx%E5%88%86%E7%A6%BB%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" title="nginx分离式配置文件">
+                        <span class="hidden-mobile">nginx分离式配置文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
   </div>
+</div>
+
+
+
+
+
   
-</body>
-
-
-<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 
 
 
+  
 
 
 
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+  
 
 
 
+  
 
 
 
-<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-
+  
 
 
 
 
 
-<script src="/js/utils.js"></script>
-<script src="/js/modules.js"></script>
-<script src="/js/zui.js"></script>
-<script src="/js/script.js"></script>
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
 
 
 
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
+
+
+
+  
 <script>
-  (function (i, s, o, g, r, a, m) {
-    i["DaoVoiceObject"] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    a.charset = "utf-8";
-    m.parentNode.insertBefore(a, m)
-  })(window, document, "script", ('https:' == document.location.protocol ? 'https:' : 'http:') +
-    "//widget.daovoice.io/widget/0f81ff2f.js", "daovoice")
-  daovoice('init', {
-    app_id: "abcdefg"
-  }, {
-    launcher: {
-      disableLauncherIcon: true,
-    },
-  });
-  daovoice('update');
-</script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
 
-
-
-<script>
-  (function () {
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    } else {
-      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
     }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-  })();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
 </script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
 <script>
-  var _hmt = _hmt || [];
-  (function () {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?4c204d8bc027a0455b5fc642ac334ca8";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
 </script>
 
 
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
 
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
 
 
+  
 
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
 </html>
