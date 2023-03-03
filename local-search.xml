@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>C++类继承中的访问类型的改变</title>
+    <link href="/2021/11/17/C-%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98/"/>
+    <url>/2021/11/17/C-%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98/</url>
+    
+    <content type="html"><![CDATA[<p>类继承一般形式：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">//基类</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> &#123;</span><br>    <span class="hljs-comment">// eat() 函数</span><br>    <span class="hljs-comment">// sleep() 函数</span><br>&#125;;<br><br><span class="hljs-comment">//派生类</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Dog</span> :</span> public Animal &#123;<br>    <span class="hljs-comment">// bark() 函数</span><br>&#125;;<br></code></pre></td></tr></table></figure><p>继承中的特点<br>有public, protected, private三种继承方式，它们相应地改变了基类成员的访问属性。</p><p>1.public 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：public, protected, private</p><p>2.protected 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：protected, protected, private</p><p>3.private 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：private, private, private</p><p>但无论哪种继承方式，上面两点都没有改变：</p><p>1.private 成员只能被本类成员（类内）和友元访问，不能被派生类访问；</p><p>2.protected 成员可以被派生类访问。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>《FreeRTOS二》</title>
+    <link href="/2021/08/12/%E3%80%8AFreeRTOS%E4%BA%8C%E3%80%8B/"/>
+    <url>/2021/08/12/%E3%80%8AFreeRTOS%E4%BA%8C%E3%80%8B/</url>
+    
+    <content type="html"><![CDATA[<p>四、任务调度方式<br>    FreeRTOS支持三种调度方式：抢占式、时间片式、合作式调度实际上主要是抢占式和时间片式两种，合作式调度用的很少。<br>    抢占式调度：<br>    每个任务都有不同的优先级， 任务会一直运行直到被高优先级任务抢占或者遇到阻塞式的 API 函数，比如 vTaskDelay。</p><pre><code class="hljs">时间片调度：每个任务都有相同的优先级， 任务会运行固定的时间片个数或者遇到阻塞式的 API 函数，比如vTaskDelay， 才会执行同优先级任务之间的任务切换。</code></pre><p>五、临界段和开关中断<br>    代码的临界段也称为临界区，一旦这部分代码开始执行，则不允许任何中断打断。为确保临界段代码的执行不被中断，在进入临界段之前须关中断，而临界段代码执行完毕后，要立即开中断。<br>    FreeRTOS 的源码中有多处临界段的地方， 临界段虽然保护了关键代码的执行不被打断， 但也会影响系统的实时性。比如此时某个任务正在调用系统 API 函数，而且此时中断正好关闭了，也就是进入到了临界区中，这个时候如果有一个紧急的中断事件被触发，这个中断就不能得到及时执行，必须等到中断开启才可以得到执行， 如果关中断时间超过了紧急中断能够容忍的限度， 危害是可想而知的。<br>    FreeRTOS 源码中就有多处临界段的处理， 跟 FreeRTOS 一样， uCOS-II 和 uCOS-III 源码中都是有临界段的， 而 RTX 的源码中不存在临界段。 另外， 除了 FreeRTOS 操作系统源码所带的临界段以外，用户写应用的时候也有临界段的问题，比如以下两种：<br>    1、读取或者修改变量（特别是用于任务间通信的全局变量）的代码，一般来说这是最常见的临界代码。<br>    2、调用公共函数的代码，特别是不可重入的函数，如果多个任务都访问这个函数，结果是可想而知的。总之， 对于临界段要做到执行时间越短越好， 否则会影响系统的实时性。<br>    在FreeRTOS 任务代码中临界段的进入和退出主要是通过操作寄存器 basepri 实现的。进入临界段前操作寄存basepri 关闭了所有小于等于宏定义 configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY所定义的中断优先级， 这样临界段代码就不会被中断干扰到， 而且实现任务切换功能的 PendSV 中断和滴答定时器中断是最低优先级中断， 所以此任务在执行临界段代码期间是不会被其它高优先级任务打断的。退出临界段时重新操作 basepri 寄存器，即打开被关闭的中断。<br>六、调度锁，任务锁和中断锁<br>    调度锁：即任务调度器的开关。但是它并没有关闭任务的中断，意思是它只会保证任务不会被高优先级任务抢占，中断还是能够正常的执行。区分它和临界段的处理方式，调度锁只是禁止了任务调度， 并没有关闭任何中断，中断还是正常执行的。而临界段进行了开关中断操作。<br>    任务锁：简单的说， 为了防止当前任务的执行被其它高优先级的任务打断而提供的锁机制就是任务锁。<br>    中断锁：中断锁就是 RTOS 提供的开关中断函数， FreeRTOS 没有专门的中断锁函数，中断锁本质上来说就是使用临界代码段的关闭中断操作来执行。<br>    总而言之、言而总之，这几种锁的目的都是人为的改变调度的顺序，或者是程序执行的顺序从而达到我们的目的。主要是明白可能影响系统执行结果的其他因素是来自中断还是其他任务就能借这些方式完成想要的功能。<br>七、时钟节拍<br>    任何操作系统都需要提供一个时钟节拍，以供系统处理诸如延时、 超时等与时间相关的事件。时钟节拍是特定的周期性中断， 这个中断可以看做是系统心跳。 中断之间的时间间隔取决于不同的应用，一般是 1ms – 100ms。时钟的节拍中断使得内核可以将任务延迟若干个时钟节拍，以及当任务等待事件发生时，提供等待超时等依据。时钟节拍率越快，系统的额外开销就越大。一半系统节拍默认设置为1000Hz。<br>    相关函数：<br>    1、vTaskDelay用于任务延迟，高优先级任务调用此函数时释放CPU资源，供调度器安排给其他就绪态任务使用，而自身进入阻塞态。<br>    2、vTaskDelayUntil同vTaskDelay一样，但是vTaskDelayUntil会多一个上次运行的时间参数参数，根据这个时间来提供延时，不会出现丢失任务的情况，详见<a href="https://blog.csdn.net/findmu/article/details/88971601">vTaskDelayUntil与vTaskDelay区别</a><br>    3、xTaskGetTickCount和xTaskGetTickCountFromISR用于获取当前运行的系统时钟节拍数，前者只能在任务里面调用，不能在中断当中调用，如果在中断里面的话要使用xTaskGetTickCountFromISR来获取节拍数。<br>八、事件标志组<br>    事件标志组是实现多任务同步的有效机制之一。也许有不理解的初学者会问采用事件标志组多麻烦，搞个全局变量不是更简单？ 其实不然， 在裸机编程时，使用全局变量的确比较方便，但是在加上 RTOS 后就是另一种情况了。 使用全局变量相比事件标志组主要有如下三个问题：<br>    1、使用事件标志组可以让 RTOS 内核有效地管理任务， 而全局变量是无法做到的，任务的超时等机制需要用户自己去实现。<br>    2、使用了全局变量就要防止多任务的访问冲突，而使用事件标志组则处理好了这个问题，用户无需担心。<br>    3、使用事件标志组可以有效地解决中断服务程序和任务之间的同步问题。</p><pre><code class="hljs">事件标志通信过程：任务Task1运行过程中调用函数xEventGroupWaitBits，等待事件标志位被设置，任务Task1由运行态进入到阻塞态。任务Task2设置Task1等待的事件标志，任务Task1由阻塞态进入到就绪态，在调度器的作用下由就绪态又进入到运行态。事件标志组的中断方式：任务Task1运行过程中调用函数xEventGroupWaitBits，等待事件标志位被设置，任务Task1由运行态进入到阻塞态。Task1阻塞的情况下，串口接收到数据进入到了串口中断服务程序，在串口中断服务程序中设置 Task1等待的事件标志，任务Task1由阻塞态进入到就绪态，在调度器的作用下由就绪态又进入到运行态。上面就是一个简单FreeRTOS中断方式事件标志通信过程。事件标志组主要函数：xEventGroupCreate()xEventGroupCreateStatic()vEventGroupDelete()xEventGroupWaitBits()xEventGroupSetBits()xEventGroupSetBitsFromISR()xEventGroupClearBits()xEventGroupClearBitsFromISR()xEventGroupGetBits()xEventGroupGetBitsFromISR()xEventGroupSync() 说明：xEventGroupWaitBits 如果由于指定的事件标志位被置1而返回，并且设置了这个函数的参数xClearOnExit为pdTRUE，那么此函数的返回值是清零前的事件标志组数值。</code></pre>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>FreeRTOS</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>v2ray证书更新</title>
+    <link href="/2021/08/10/v2ray%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/"/>
+    <url>/2021/08/10/v2ray%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/</url>
+    
+    <content type="html"><![CDATA[<p>由于免费的acmeECC证书三个月过期，所以手动更新证书：</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">sudo ~/<span class="hljs-selector-class">.acme</span>.sh/acme<span class="hljs-selector-class">.sh</span> <span class="hljs-attr">--renew</span> -d mydomain<span class="hljs-selector-class">.com</span> <span class="hljs-attr">--force</span> <span class="hljs-attr">--ecc</span><br></code></pre></td></tr></table></figure><p>安装证书：</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus">curl  https:<span class="hljs-comment">//get.acme.sh | sh</span><br><br>sudo apt-get -y install netcat<br><br>sudo ~/<span class="hljs-selector-class">.acme</span>.sh/acme<span class="hljs-selector-class">.sh</span> <span class="hljs-attr">--issue</span> -d mydomain<span class="hljs-selector-class">.me</span> <span class="hljs-attr">--standalone</span> -k ec-<span class="hljs-number">256</span><br><br>sudo ~/<span class="hljs-selector-class">.acme</span>.sh/acme<span class="hljs-selector-class">.sh</span> <span class="hljs-attr">--installcert</span> -d mydomain<span class="hljs-selector-class">.me</span> <span class="hljs-attr">--fullchainpath</span> /etc/v2ray/v2ray<span class="hljs-selector-class">.crt</span> <span class="hljs-attr">--keypath</span> /etc/v2ray/v2ray<span class="hljs-selector-class">.key</span> <span class="hljs-attr">--ecc</span><br><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>v2ray</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>《FreeRTOS一》</title>
+    <link href="/2021/08/06/%E3%80%8AFreeRTOS%E4%B8%80%E3%80%8B/"/>
+    <url>/2021/08/06/%E3%80%8AFreeRTOS%E4%B8%80%E3%80%8B/</url>
+    
+    <content type="html"><![CDATA[<p>一、系统栈与任务栈<br>FreeRTOS的系统栈在MCU的启动文件当中修改大小，任务栈在FreeRTOSConfig.h当中定义：<br>    #define configTOTAL_HEAP_SIZE ( ( size_t ) ( 17 * 1024 ) )<br>由于 Cortex-M3 和 M4 内核具有双堆栈指针，MSP 主堆栈指针和 PSP 进程堆栈指针，或者叫 PSP任务堆栈指针也是可以的。在 FreeRTOS 操作系统中，主堆栈指针 MSP 是给系统栈空间使用的， 进程堆栈指针 PSP 是给任务栈使用的。 也就是说，在 FreeRTOS 任务中，所有栈空间的使用都是通过PSP 指针进行指向的。 一旦进入了中断函数以及可能发生的中断嵌套都是用的 MSP 指针。实际应用中系统栈空间分配多大，主要是看可能发生的中断嵌套层数， 下面我们就按照最坏执行情况进行考虑，所有的寄存器都需要入栈， 此时分为两种情况：<br>64字节：对于 Cortex-M3 内核和未使用 FPU（浮点运算单元） 功能的 Cortex-M4 内核在发生中断时需要将 16 个通用寄存器全部入栈， 每个寄存器占用 4 个字节，也就是 <code>16*4 = 64 </code>字节的空间。可能发生几次中断嵌套就是要 64 乘以几即可。 当然，这种是最坏执行情况，也就是所有的寄存器都入栈。<br>（ 注：任务执行的过程中发生中断的话，有 8 个寄存器是自动入栈的，这个栈是任务栈， 进入中断以后其余寄存器入栈以及发生中断嵌套都是用的系统栈）200字节：对于具有 FPU（浮点运算单元） 功能的 Cortex-M4 内核， 如果在任务中进行了浮点运算，那么在发生中断的时候除了 16 个通用寄存器需要入栈，还有 34 个浮点寄存器也是要入栈的， 也就是<code>(16+34)*4 = 200</code> 字节的空间。当然，这种是最坏执行情况，也就是所有的寄存器都入栈。<br>（ 注：任务执行的过程中发送中断的话，有 8 个通用寄存器和 18 个浮点寄存器是自动入栈的，这个栈是任务栈， 进入中断以后其余通用寄存器和浮点寄存器入栈以及发生中断嵌套都是用的系统栈）<br>详见宋岩翻译的《CORTEX M3权威指南》 第九章 的中断的具体行为的讲解</p><p>二、任务状态<br>FreeRTOS 的运行支持以下四种状态：<br>1 Running—运行态<br>当任务处于实际运行状态被称之为运行态， 即 CPU 的使用权被这个任务占用。<br>2 Ready—就绪态<br>处于就绪态的任务是指那些能够运行（ 没有被阻塞和挂起）， 但是当前没有运行的任务， 因为同优先<br>级或更高优先级的任务正在运行。<br>3 Blocked—阻塞态<br>由于等待信号量，消息队列，事件标志组等而处于的状态被称之为阻塞态，另外任务调用延迟<br>函数也会处于阻塞态。<br>4 Suspended—挂起态<br>类似阻塞态，通过调用函数 <code>vTaskSuspend()</code>对指定任务进行挂起，挂起后这个任务将不被执行，只有调用函数 <code>xTaskResume()</code>才可以将这个任务从挂起态恢复。</p><p>三、任务相关操作函数<br>1、创建任务函数：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">BaseType_t <span class="hljs-title">xTaskCreate</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">TaskFunction_t pvTaskCode, <span class="hljs-comment">/* 任务函数 */</span></span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span> * <span class="hljs-type">const</span> pcName, <span class="hljs-comment">/* 任务名 */</span></span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> usStackDepth, <span class="hljs-comment">/* 任务栈大小，单位 word，也就是 4 字节 */</span></span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-type">void</span> *pvParameters, <span class="hljs-comment">/* 任务参数 */</span></span></span><br><span class="hljs-params"><span class="hljs-function">UBaseType_t uxPriority, <span class="hljs-comment">/* 任务优先级 */</span></span></span><br><span class="hljs-params"><span class="hljs-function">TaskHandle_t *pvCreatedTask <span class="hljs-comment">/* 任务句柄 */</span></span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure><p> 2、删除任务函数<br> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">vTaskDelete</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">TaskHandle_t xTask </span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>; <span class="hljs-comment">/* 任务句柄 */</span><br></code></pre></td></tr></table></figure><br>关于使用该函数：<br>    使用此函数需要在 FreeRTOSConfig.h 配置文件中配置如下宏定义为 1<br>    #define INCLUDE_vTaskDelete 1<br>    如果用往此函数里面填的任务 ID 是 NULL，即数值 0 的话，那么删除的就是当前正<br>执行的任务，此任务被删除后， FreeRTOS 会切换到任务就绪列表里面下一个要执行的最高优先级任务。<br>    在 FreeRTOS 中，被该函数删除的任务的内存需要在空闲任务中释放， 如果用户在<br>FreeRTOS 中调用了这个函数的话，一定要让空闲任务有执行的机会， 否则这块内存是无法释放的。另外， 创建的这个任务在使用中申请了动态内存，这个内存不会因为此任务被删除而删除，这一点要注意， 一定要在删除前手动将此内存释放。</p><p> 3、挂起任务与恢复任务函数</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">vTaskSuspend</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">TaskHandle_t xTaskToSuspend</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>; <span class="hljs-comment">/* 任务句柄 */</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">vTaskResume</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">TaskHandle_t xTaskToResume</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>; <span class="hljs-comment">/* 任务句柄 */</span><br></code></pre></td></tr></table></figure><p>关于函数的使用：<br>    使用这两个函数需要在 FreeRTOSConfig.h 配置文件中配置如下宏定义为 1<br>    #define INCLUDE_vTaskSuspend 1<br>    如果挂起函数里面填的任务 ID 是 NULL，即数值 0 的话，那么挂起的就是当前正在执 行的任务，此任务被挂起后， FreeRTOS 会切换到任务就绪列表里面下一个要执行的高优先级任务。<br>    多次调用挂起函数的话，只需调用一次<code>vTaskResume</code> 即可将任务从挂起态恢复。<br>    恢复函数是用于任务代码中调用的，故不可以在中断服务程序中调用此函数，中断服务程序中使用的<code>xTaskResumeFromISR()</code>， 以后缀 FromISR 结尾。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">vTaskResumeFromISR</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">TaskHandle_t xTaskToResume</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>; <span class="hljs-comment">/* 任务句柄 */</span><br></code></pre></td></tr></table></figure><pre><code class="hljs">如果用户打算采用这个函数实现中断与任务的同步，要注意一种情况，如果此函数的调用优先于函数`vTaskSuspend()`被调用，那么此次同步会丢失，这种情况下建议使用信号量实现同步。</code></pre>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>FreeRTOS</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>《数据结构二》</title>
+    <link href="/2021/08/04/%E3%80%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BA%8C%E3%80%8B/"/>
+    <url>/2021/08/04/%E3%80%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BA%8C%E3%80%8B/</url>
+    
+    <content type="html"><![CDATA[<p>二、栈：<br>栈是仅限定在表尾进行操作元素的线性表，表尾称为栈顶，表头称为栈底。没有元素的话称为空栈。是一种后入先出的线性表。<br>栈也有两种物理存储方式，顺序栈使用一组连续的内存空间依次存放栈底到栈顶的元素，同时附设指针top指示栈顶元素在顺序栈中的位置。通常以top&#x3D;0 表示空栈。，由于栈在使用中所需要的最大空间的大小很难估计，因此一般初始化栈的时候不会指定栈的大小。一般使用方法是，先为栈分配一个基本大小，然后在使用过程中随着栈的空间不足时逐段扩大。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>数据结构</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>《数据结构一》</title>
+    <link href="/2021/08/02/%E3%80%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%80%E3%80%8B/"/>
+    <url>/2021/08/02/%E3%80%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%80%E3%80%8B/</url>
+    
+    <content type="html"><![CDATA[<p>一、线性表：<br>分为顺序表示和链式表示：<br>    顺序表示线性表：在内存中连续的物理存储结构。<br>    优缺点：可随机存取，但是对插入操作，删除操作需要对后面的元素重新放置，时间复杂度高</p><pre><code class="hljs">链表：逻辑连续，但是物理存储上不一定连续的数据结构。按照指针链接方式分为多种链表。单链表：每个单链表由头指针唯一确定，头指针只包含指向第一个节点的指针，每个节点只包含指向下一节点的指针。也可在第一个节点之前增加一个头节点用来存储链表长度信息，头指针指向头节点。若线性表为空表，则头节点的指针域为NULL。由于每个节点只包含指向下一个节点的指针，所以每次寻找信息都是头开始间检索。因此单链表是非随机存取结构。静态链表：用数组中的一个变量表示在当前表中的位置，达到类似链表的功能，不需要实际操作指针。双向链表：每个节点都有两个指针域分别指向前一个结点和后一个节点。循环链表：首尾相连的链表，从任意位置出发均可遍历到每个节点。不论单双向链表都又循环链表。</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>知识</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>数据结构</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>记录一次Gitlab迁移操作踩的坑</title>
+    <link href="/2020/11/17/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9C%A8gitlab%E8%BF%81%E7%A7%BB%E4%B8%AD%E8%B8%A9%E7%9A%84%E5%9D%91/"/>
+    <url>/2020/11/17/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9C%A8gitlab%E8%BF%81%E7%A7%BB%E4%B8%AD%E8%B8%A9%E7%9A%84%E5%9D%91/</url>
+    
+    <content type="html"><![CDATA[<h5 id="记录一次Gitlab迁移过程踩的坑："><a href="#记录一次Gitlab迁移过程踩的坑：" class="headerlink" title="记录一次Gitlab迁移过程踩的坑："></a>记录一次Gitlab迁移过程踩的坑：</h5><h4 id="一、保证两个服务器gitlab版本一致"><a href="#一、保证两个服务器gitlab版本一致" class="headerlink" title="一、保证两个服务器gitlab版本一致"></a>一、保证两个服务器gitlab版本一致</h4><pre><code class="hljs">查看版本命令：</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat /opt/gitlab/embedded/service/gitlab-rails/VERSION<br></code></pre></td></tr></table></figure><pre><code class="hljs">    笔者这里用的10.0.0版本旧服务器备份    备份时需要保持gitlab处于正常运行状态，直接执行`gitlab-rake gitlab:backup:create`进行备份新服务器环镜    推荐用阿里云镜像市场中的gitlab镜像    &lt;https://market.aliyun.com/products/?keywords=gitlab&gt;    搜索gitlab，选择第一个，然后购买之后升级到与旧服务器一样的版本，这里升级到10.0.0，这里阿里的镜像是9，不需要跨版本    wget https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-10.0.0-ce.0.el7.x86_64.rpm    注意如果版本过低需要一步一步升级，不支持夸版本升级。夸版本升级参考：    &lt;https://blog.csdn.net/weixin_34288121/article/details/91423771&gt;        下载包后关闭GitLab核心服务：</code></pre> <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">gitlab-ctl stop unicorn<br>gitlab-ctl stop sidekiq<br>gitlab-ctl stop nginx <br></code></pre></td></tr></table></figure><pre><code class="hljs">    包管理器安装：        `rpm -Uvh 包名`        本例：        `rpm -Uvh gitlab-ce-10.0.0-ce.0.el7.x86_64.rpm`    安装后重启        `gitlab-ctl restart`    部分CentOS版本较低未自带policycoreutils-python组件可能无法升级至10.x,需要手动安装后再升级：        `yum -y install policycoreutils-python`到此完成了两个版本对齐的操作。</code></pre><h4 id="二、发送旧服务器备份包到新服务器的相同文件夹下"><a href="#二、发送旧服务器备份包到新服务器的相同文件夹下" class="headerlink" title="二、发送旧服务器备份包到新服务器的相同文件夹下"></a>二、发送旧服务器备份包到新服务器的相同文件夹下</h4><pre><code class="hljs">我用的xshell+xftp访问服务器，直接xftp可视化操作完成也可用scp命令：    再旧服务器上输入：`scp /var/opt/gitlab/backups/`备份文件名 `root@这里填新服务器ip地址:/var/opt/gitlab/backups/`    之后会让你输入新服务器密码，输入之后就等着传输完成，一般都比较大500M以上，可以小酌一杯。</code></pre><h4 id="三、新服务器安装备份实现迁移"><a href="#三、新服务器安装备份实现迁移" class="headerlink" title="三、新服务器安装备份实现迁移"></a>三、新服务器安装备份实现迁移</h4><pre><code class="hljs">1.给备份包满权限    进入 `/var/opt/gitlab/backups/`    `chmod 777 包名`2.停止相关数据连接服务    `gitlab-ctl stop unicorn`    `gitlab-ctl stop sidekiq`3.安装备份包    `gitlab-rake gitlab:backup:restore BACKUP=包id`    之后输入两次yes，安装完成！4.重启gitlab，大功告成！    `gitlab-ctl start`</code></pre><blockquote><p>错误记录：安装完成登陆后只能看到项目，进去查看发现项目存储库不存在。只剩下个空壳子。<br>原因：我在恢复的时候把两个配置文件也从旧服务器复制过来覆盖本地了，造成配置文讲出了问题。<br>解决办法：新服务器的gitlab安装好后，只用恢复旧服务器发过来的备份包就好了，不需要再去搞配置文件，动了反而要出错。</p></blockquote><p>可能帮助到你的链接：<br><a href="https://www.cnblogs.com/ssgeek/p/9392104.html">https://www.cnblogs.com/ssgeek/p/9392104.html</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Gitlab搭建</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>frp在linux的后台启动运行</title>
+    <link href="/2020/10/16/frp%E5%9C%A8linux%E7%9A%84%E5%90%8E%E5%8F%B0%E5%90%AF%E5%8A%A8%E8%BF%90%E8%A1%8C/"/>
+    <url>/2020/10/16/frp%E5%9C%A8linux%E7%9A%84%E5%90%8E%E5%8F%B0%E5%90%AF%E5%8A%A8%E8%BF%90%E8%A1%8C/</url>
+    
+    <content type="html"><![CDATA[<p>后台运行frp服务</p><pre><code class="hljs">服务端： nohup ./frps -c frps.ini &gt;/dev/null 2&gt;&amp;1 &amp;客户端： nohup ./frpc -c frpc.ini &gt;/dev/null 2&gt;&amp;1 &amp; 说明：&gt;/dev/null 2&gt;&amp;1 &amp;，表示丢弃。</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>知识</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Frp内网穿透</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>linux网络编程基础</title>
+    <link href="/2020/10/15/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/"/>
+    <url>/2020/10/15/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</url>
+    
+    <content type="html"><![CDATA[<p>1、TCP&#x2F;IP协议<br>    传输控制&#x2F;网际协议(Transfer Control Protocol&#x2F;Internet Protocol) 又称作网络通讯协议<br>    四个层次：网络接口层、网际层、传输层、应用层</p><p>2、网络编程常用函数：<br>    网络编程头文件：<br>        #include &lt;stdio.h&gt;<br>        #include &lt;string.h&gt;<br>        #include &lt;stdlib.h&gt;<br>        #include &lt;strings.h&gt;<br>        #include &lt;sys&#x2F;socket.h&gt;<br>        #include &lt;netinet&#x2F;in.h&gt;<br>        #include &lt;arpa&#x2F;inet.h&gt;<br>        #include &lt;sys&#x2F;types.h&gt;<br>        #include &lt;unistd.h&gt;</p><pre><code class="hljs">/*****************socket() -- 创建套接字*********************/    int socket(int domain, int type, int protocol);    domain是地址族        PF_INET  // internet 协议 // AF_INET        PF_UNIX // unix internal协议        PF_NS      // Xerox NS协议        PF_IMPLINK  // Interface Message协议    type //套接字类型       SOCK_STREAM   // 流式套接字       SOCK_DGRAM    // 数据报套接字SOCK_RAW     //  原始套接字    protocol 参数通常置为0    返回值：        成功：套接字，linux系统下特殊的文件描述符        失败：-1（系统调用失败都是-1，错误码保存在进程的全局变量errno中）            例：int sockfd = socket(PF_INET, SOCK_STREAM, 0);                /*****************bind() -- 绑定本机地址和端口*********************/    int bind(int sockfd, struct sockaddr *my_addr, int addrlen) ;     头文件:    #include &lt;sys/types.h&gt;    #include &lt;sys/socket.h&gt;    sockfd: socket调用返回的文件描述符      addrlen: sockaddr地址结构的长度返回值：0或-1        例：int ret = bind(sockfd, (struct sockaddr*)&amp;my_addr, sizeof(my_addr));        Internet协议地址结构    struct sockaddr_in  // struct sockaddr    &#123;                    u_short sin_family;      // 地址族, AF_INET，2 bytes        u_short sin_port;      // 端口，2 bytes        struct in_addr sin_addr;  // IPV4地址，4 bytes   // .sin_addr.s_addr =         char sin_zero[8];       // 8 bytes unused，作为填充    &#125;;         端口号：1-65535，其中0不使用        1-1023: 系统端口,这些端口只有系统特许的进程才能使用;        1024-5000: 一般的应用程序使用1024到4999来进行通讯;        5001-65535： 服务器(非特权)端口,用来给用户自定义端口.    地址结构的一般用法：        1、 定义一个struct sockaddr_in类型的变量并清空        struct sockaddr_in myaddr;        memset(&amp;myaddr, 0, sizeof(myaddr));    2、 填充地址信息        myaddr.sin_family = PF_INET;        myaddr.sin_port = htons(8888);  //8888 error        //myaddr.sin_addr.s_addr = inet_addr(“192.168.1.100”);  服务器中一般填 INADDR_ANY        myaddr.sin_addr.s_addr = INADDR_ANY;        myaddr.sin_zero = &#123;0&#125;;    3、 将该变量强制转换为struct sockaddr类型在函数中使用        bind(listenfd, (struct sockaddr*)(&amp;myaddr), sizeof(myaddr));        /*****************listen() -- 设置监听套接字*********************/        int listen (int sockfd, int backlog);    sockfd:监听连接的套接字    backlog：        指定了正在等待连接的最大队列长度，它的作用在于处理可能同时出现的几个连接请求。        DoS(拒绝服务)攻击即利用了这个原理，非法的连接占用了全部的连接数，造成正常的连接请求被拒绝。    返回值： 0 或 -1    完成listen()调用后，socket变成了监听socket(listening socket).    /*****************accept() -- 接受TCP客户端连接*********************/            int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen) ;    头文件        #include &lt;sys/types.h&gt;        #include &lt;sys/socket.h&gt;      sockfd : 监听套接字     addr : 对方地址    addrlen 长度地址    返回值：已建立好连接的套接字(读写套接字)或-1        listen()和accept()是TCP服务器端使用的函数    /*****************connect() -- 建立连接*********************/    int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);    头文件：        #include &lt;sys/types.h&gt;        #include &lt;sys/socket.h&gt;      sockfd : socket返回的文件描述符    serv_addr : 服务器端的地址信息      addrlen : serv_addr的长度     返回值：0 或 -1        connect()是客户端使用的系统调用    /*****************recv(),read() -- 数据接收*********************/        ssize_t  recv(int  socket,  const  void  *buffer,  size_t  length, int flags);    返回值：        成功：实际接收的字节数        失败：-1, 并设置errno    头文件：        #include &lt;sys/socket.h&gt;    buffer : 发送缓冲区首地址    length : 发送的字节数    flags : 接收方式（通常为0）    ssize_t read(int fd, void *buf, size_t count);/*****************send(),write() -- 数据发送*********************/    ssize_t  send(int  socket,  const  void  *buffer,  size_t  length, int flags);    返回值：        成功：实际发送的字节数        失败：-1, 并设置errno    头文件：        #include &lt;sys/socket.h&gt;    buffer : 发送缓冲区首地址    length : 发送的字节数    flags : 发送方式（通常为0）    ssize_t write(int fd, const void *buf, size_t count);/*****************close() -- 关闭套接字*********************/        int close(int sockfd);    关闭双向通讯；            TCP服务器端流程:    socket -&gt; bind -&gt; lisent-&gt; accept -&gt; send/recv -&gt; close(关闭后回到accept之前)TCP客户端流程：    socket -&gt; bind(可选) -&gt; connect -&gt; send/recv -&gt; close循环服务器模型：    TCP服务器        1、 TCP服务器端运行后等待客户端的连接请求        2、 TCP服务器接受一个客户端的连接后开始处理，完成了客户的所有请求后断开连接        3、 TCP循环服务器一次只能处理一个客户端的请求        4、 只有在当前客户的所有请求都完成后，服务器才能处理下一个客户的连接/服务请求        5、 如果某个客户端一直占用服务器资源，那么其它的客户端都不能被处理。TCP服务器一般很少采用循环服务器模型TCP循环服务器流程如下：    socket(...);    bind(...);    listen(...);    while(1)    &#123;        accept(...);        while(1)        &#123;            recv(...);            process(...);            send(...);        &#125;        close(...);    &#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>LINUX</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux基础命令</title>
+    <link href="/2020/10/09/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/"/>
+    <url>/2020/10/09/Linux%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<p>一、linux基础<br>    1、shell指令<br>        pwd:显示当前用户所在的绝对路径<br>            绝对路径：从根目录开始描述的一条路径<br>            相对路径：相对用户当前所在的一条路径</p><pre><code class="hljs">    cd：目录跳转        用法：            cd + 要跳转到的路径            ls：列出当前用户所在目录的所有文件(不包含隐藏文件)        用法：            ls + 回车        ls -a:列出当前用户所在目录的所有文件（包含隐藏文件）        ls -l:列出当前用户所在目录的所有文件的详细信息        cat：查看指定文件的内容        用法：cat + 文件名        touch：以不打开的方式创建一个新的文件        用法：            touch + 文件名            rm：删除指定的文件        用法：            rm + 文件名            cp：复制文件        用法：cp + 源文件名 + 路径(文件名)    mv：移动文件        用法：mv + 源文件名 + 路径(文件名)                mkdir:创建一个新的目录        用法：mkdir + 目录名        rmdir：删除一个空目录    rm -r 目录名：删除一个非空目录    clear：清屏  或者使用  快捷键ctrl + l    Tab：自动补全指令2、vim编辑器    shell指令：        vi或者vim + 文件名  --&gt;  以打开的方式创建一个新的文件，如果该文件存在，则直接打开        例：vim 1.c   //编辑1.c这个文件v            编辑器中的三种模式：命令行模式、编辑模式、底行模式            1)、命令行模式：用户进入的默认模式，该模式下，可以对文本进行复制，剪切、粘贴、撤销等操作            在命令行模式下输入：                nyy：复制光标以及光标以下所在的n行数据                ndd：剪切光标以及光标以下所在的n行数据                p：将复制或者剪切的内容粘贴到光标所在的下一行                u：撤销上一步操作        2)、编辑模式：            在命令行模式下输入： a、i、o进入编辑模式            在编辑模式下按Esc键退回到命令行模式                        3)、底行模式：在底行模式下可以对文件进行保存退出等操作            在命令行模式下输入冒号进入底行模式                            在底行模式下输入：                    w：保存                    q：退出                    wq：保存并且退出                    q!:强制不保存退出3、gcc编译工具        shell指令：            gcc c文件名        gcc编译成功之后，会在当前目录默认产生一个名为 a.out 的可执行文件                gcc c文件名 -o 新的可执行文件名            例:                gcc test.c -o test   //编译之后生成的a.out被重命名为test         4、执行可执行文件        shell指令：            ./可执行文件名</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>LINUX</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>nginx分离式配置文件</title>
+    <link href="/2020/09/13/nginx%E5%88%86%E7%A6%BB%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/"/>
+    <url>/2020/09/13/nginx%E5%88%86%E7%A6%BB%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
+    
+    <content type="html"><![CDATA[<p>直接在conf.d文件夹下新建*.conf 然后添加下列代码：</p><p>server {<br>    listen 80;<br>    server_name 47.112.226.171;   &#x2F;&#x2F;这里填写服务器ip<br>    location &#x2F; {<br>            root   &#x2F;www;   &#x2F;&#x2F;这里填写静态网页所在位置<br>            index  index.php index.html index.htm;<br>    }<br>    location &#x2F;sell {<br>        proxy_set_header   X-Real-IP $remote_addr;<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>        proxy_set_header   Host      $http_host;<br>        proxy_set_header X-NginX-Proxy true;<br>        proxy_pass         <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a>;<br>        proxy_redirect off;<br>    }<br>}</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>最后的指令</title>
+    <link href="/2020/08/01/%E6%9C%80%E5%90%8E%E7%9A%84%E6%8C%87%E4%BB%A4/"/>
+    <url>/2020/08/01/%E6%9C%80%E5%90%8E%E7%9A%84%E6%8C%87%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<p>Brain:All units function report!<br>Heart: Function loss 99%.<br>Liver: Function loss 99%.<br>Spleen: Function loss 99%.<br>Lung: Function loss 99%.<br>Brain:External support won’t reverse the situation.<br>How much adrenaline left?<br>Paranephros:Remaining 5%,unable to synthesize.<br>Brain:All remaining adrenaline allocates to nervous system and vocal muscles.<br>Prepare to send the last message to the outside world.<br>Brain:All other units,prepare to cease the function!<br>This instruction won’t repeat!<br>Thanks you for your tens of years sincere cooperation,farewell!</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>心情</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>心情</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>写给黄淮</title>
+    <link href="/2019/03/25/%E5%86%99%E7%BB%99%E9%BB%84%E6%B7%AE/"/>
+    <url>/2019/03/25/%E5%86%99%E7%BB%99%E9%BB%84%E6%B7%AE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="你是我患得患失的梦，我是你可有可无的人！"><a href="#你是我患得患失的梦，我是你可有可无的人！" class="headerlink" title="你是我患得患失的梦，我是你可有可无的人！"></a><em>你是我患得患失的梦，我是你可有可无的人！</em></h1><p><img src="/images/xghh.jpg"></p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/song/media/outer/url?id=1306400549.mp3"></iframe>]]></content>
+    
+    
+    <categories>
+      
+      <category>心情</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>心情</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>真实</title>
+    <link href="/2018/11/26/%E7%9C%9F%E5%AE%9E/"/>
+    <url>/2018/11/26/%E7%9C%9F%E5%AE%9E/</url>
+    
+    <content type="html"><![CDATA[<p>年少的时候，会很直接地说：” 我不喜欢谁谁谁。”<br>后来长大了，不喜欢某人，再也不会直接说出来；<br>后来的后来，年纪不小了，又变回年少时的那样，不喜欢某人，直接就说；<br>都一把年纪了，还怕什么？我活得那么努力，不就是为了有一天可以快意恩仇、畅所欲言吗？能够这样爱憎分明，真是太痛快了。<br> —— 张小娴<br> <img src="/2018/11/26/%E7%9C%9F%E5%AE%9E/zs.jpg" class="" title="图片引用方法一"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>心情</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>心情</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>超级喜欢的一首现代诗</title>
+    <link href="/2018/11/25/%E8%B6%85%E7%BA%A7%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%80%E9%A6%96%E7%8E%B0%E4%BB%A3%E8%AF%97/"/>
+    <url>/2018/11/25/%E8%B6%85%E7%BA%A7%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%80%E9%A6%96%E7%8E%B0%E4%BB%A3%E8%AF%97/</url>
+    
+    <content type="html"><![CDATA[<p>致橡树</p><p>【作者】舒婷 【朝代】现代 译文对照</p><p>我如果爱你——<br>绝不像攀援的凌霄花，<br>借你的高枝炫耀自己；<br>我如果爱你——<br>绝不学痴情的鸟儿，<br>为绿荫重复单调的歌曲；<br>也不止像泉源，<br>常年送来清凉的慰藉；<br>也不止像险峰，<br>增加你的高度，<br>衬托你的威仪。<br>甚至日光，<br>甚至春雨。<br>不，<br>这些都还不够！<br>我必须是你近旁的一株木棉，<br>作为树的形象和你站在一起。<br>根，<br>紧握在地下；<br>叶，<br>相触在云里。<br>每一阵风过，<br>我们都互相致意，<br>但没有人，<br>听懂我们的言语。<br>你有你的铜枝铁干，<br>像刀，<br>像剑，<br>也像戟；<br>我有我红硕的花朵，<br>像沉重的叹息，<br>又像英勇的火炬。<br>我们分担寒潮、<br>风雷、<br>霹雳；<br>我们共享雾霭、<br>流岚、<br>虹霓。<br>仿佛永远分离，<br>却又终身相依。<br>这才是伟大的爱情，<br>坚贞就在这里：<br>爱——<br>不仅爱你伟岸的身躯，<br>也爱你坚持的位置，<br>足下的土地。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>心情</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>心情</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
