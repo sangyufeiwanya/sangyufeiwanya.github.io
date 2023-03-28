@@ -4,6 +4,32 @@
   
   
   <entry>
+    <title>Linux图形界面框架简介</title>
+    <link href="/2023/03/28/Linux%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/"/>
+    <url>/2023/03/28/Linux%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[<h2 id="关于linux两大图形界面KDE和Gnome"><a href="#关于linux两大图形界面KDE和Gnome" class="headerlink" title="关于linux两大图形界面KDE和Gnome"></a>关于linux两大图形界面KDE和Gnome</h2><p>KDE早于Gnome出现，但是KDE基于的Qt是不遵循GPL开源协议的，Qt是一个跨平台的C++图形用户界面库 ，它是挪威TrollTech公司的产品(2008年底被NOKIA收购)。 Qt具有优良的跨平台特性（支持Windows、Linux、各种UNIX、OS390和QNX等）、面向对象机制以及丰富的API，同时也可支持2D&#x2F;3D渲染和OpenGL API。在当时的同类图形用户界面库产品中，Qt的功能最为强大.但底层的基础 Qt却是一个不遵循GPL的商业软件，这就给KDE上了一道无形的枷锁并带来可能的法律风险。一大批自由程序员对KDE项目的决定深为不满，它们认为利用非自由软件开发违背了GPL的精神。于是这些GNU的狂热信徒兵分两路：其中一部分人去制作Harmonny，试图重写出一套兼容Qt的替代品，这个项目虽然技术上相对简单，但却没有获得KDE项目的支持；另一路人马则决定重新开发一套名为“GNOME（GNU Network Object Environment）”的图形环境来替代KDE。</p><p>GNOME选择完全遵循GPL的GTK图形界面库为基础，因此我们也一般将GNOME和KDE两大阵营称为GNOME&#x2F;GTK和 KDE&#x2F;Qt。与Qt基于C++语言不同，GTK采用较传统的C语言 ，虽然C语言不支持面向对象设计，看起来比较落后，但当时熟悉C语言的开发者远远多于熟悉C++的开发者。加之GNOME&#x2F;GTK完全遵循GPL版权公约，吸引了更多的自由程序员参与。</p><h2 id="linux-x2F-unix基于X-window的图形显示处理原理"><a href="#linux-x2F-unix基于X-window的图形显示处理原理" class="headerlink" title="linux&#x2F;unix基于X window的图形显示处理原理"></a>linux&#x2F;unix基于X window的图形显示处理原理</h2><p>X Window从逻辑上分为三层：最底层的X Server（X服务器）主要处理输入&#x2F;输出信息并维护相关资源，它接受来自键盘、鼠标的操作并将它交给X Client（X客户端）作出反馈，而由X Client传来的输出信息也由它来负责输出；最外层的X Client则提供一个完整的GUI界面，负责与用户的直接交互（KDE、Gnome都是一个X Client），而衔接X Server与X Client的就是“X Protocol(X通讯协议)”、它的任务是充当这两者的沟通管道。尽管UNIX厂商采用相同的X Window，但终端的X Client并不相同。</p><h2 id="Qt、GTK-和KDE、GNOME的关系"><a href="#Qt、GTK-和KDE、GNOME的关系" class="headerlink" title="Qt、GTK 和KDE、GNOME的关系"></a>Qt、GTK 和KDE、GNOME的关系</h2><p>简单来说：为了方便开发人员编写X clients，就有了Xlib来封装X协议；Xlib还不够方便，于是就有了qt和gtk，它们提供了很多窗口控件（widgets）。<br>为了方便用户 ，就出现了gnome和kde等桌面管理系统。一般来说，linux用户看到的界面就是其中之一了。gnome用的是gtk库，kde用的是qt库。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>数据结构之时间复杂度计算</title>
+    <link href="/2023/03/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97/"/>
+    <url>/2023/03/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97/</url>
+    
+    <content type="html"><![CDATA[<p>递归调用时间复杂度 &#x3D; 递归调用的次数 * 每次递归处理的数据规模（复杂度）</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C++类继承中的访问类型的改变</title>
     <link href="/2021/11/17/C-%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98/"/>
     <url>/2021/11/17/C-%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98/</url>
@@ -272,7 +298,7 @@
     <link href="/2019/03/25/%E5%86%99%E7%BB%99%E9%BB%84%E6%B7%AE/"/>
     <url>/2019/03/25/%E5%86%99%E7%BB%99%E9%BB%84%E6%B7%AE/</url>
     
-    <content type="html"><![CDATA[<h1 id="你是我患得患失的梦，我是你可有可无的人！"><a href="#你是我患得患失的梦，我是你可有可无的人！" class="headerlink" title="你是我患得患失的梦，我是你可有可无的人！"></a><em>你是我患得患失的梦，我是你可有可无的人！</em></h1><p><img src="/images/xghh.jpg"></p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/song/media/outer/url?id=1306400549.mp3"></iframe>]]></content>
+    <content type="html"><![CDATA[<h1 id="你是我患得患失的梦，我是你可有可无的人！"><a href="#你是我患得患失的梦，我是你可有可无的人！" class="headerlink" title="你是我患得患失的梦，我是你可有可无的人！"></a><em>你是我患得患失的梦，我是你可有可无的人！</em></h1><img src="/2019/03/25/%E5%86%99%E7%BB%99%E9%BB%84%E6%B7%AE/xghh.jpg" class="" title="写给黄淮"><p><img src="/images/xghh.jpg"></p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/song/media/outer/url?id=1306400549.mp3"></iframe>]]></content>
     
     
     <categories>
@@ -297,7 +323,7 @@
     <link href="/2018/11/26/%E7%9C%9F%E5%AE%9E/"/>
     <url>/2018/11/26/%E7%9C%9F%E5%AE%9E/</url>
     
-    <content type="html"><![CDATA[<p>年少的时候，会很直接地说：” 我不喜欢谁谁谁。”<br>后来长大了，不喜欢某人，再也不会直接说出来；<br>后来的后来，年纪不小了，又变回年少时的那样，不喜欢某人，直接就说；<br>都一把年纪了，还怕什么？我活得那么努力，不就是为了有一天可以快意恩仇、畅所欲言吗？能够这样爱憎分明，真是太痛快了。<br> —— 张小娴<br> <img src="/2018/11/26/%E7%9C%9F%E5%AE%9E/zs.jpg" class="" title="图片引用方法一"></p>]]></content>
+    <content type="html"><![CDATA[<p>年少的时候，会很直接地说：” 我不喜欢谁谁谁。”<br>后来长大了，不喜欢某人，再也不会直接说出来；<br>后来的后来，年纪不小了，又变回年少时的那样，不喜欢某人，直接就说；<br>都一把年纪了，还怕什么？我活得那么努力，不就是为了有一天可以快意恩仇、畅所欲言吗？能够这样爱憎分明，真是太痛快了。<br> —— 张小娴<br> <img src="/2018/11/26/%E7%9C%9F%E5%AE%9E/zs.jpg" class="" title="真实"></p>]]></content>
     
     
     <categories>

@@ -16,21 +16,21 @@
   <meta name="author" content="HaoDuck">
   <meta name="keywords" content="">
   
-    <meta name="description" content="类继承一般形式： 12345678910&#x2F;&#x2F;基类class Animal &amp;#123;    &#x2F;&#x2F; eat() 函数    &#x2F;&#x2F; sleep() 函数&amp;#125;;&#x2F;&#x2F;派生类class Dog : public Animal &amp;#123;    &#x2F;&#x2F; bark() 函数&amp;#125;;  继承中的特点有public, protected, private三种继承方式，它们相应地改变了基类成员的访问属">
+    <meta name="description" content="关于linux两大图形界面KDE和GnomeKDE早于Gnome出现，但是KDE基于的Qt是不遵循GPL开源协议的，Qt是一个跨平台的C++图形用户界面库 ，它是挪威TrollTech公司的产品(2008年底被NOKIA收购)。 Qt具有优良的跨平台特性（支持Windows、Linux、各种UNIX、OS390和QNX等）、面向对象机制以及丰富的API，同时也可支持2D&#x2F;3D渲染和Ope">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++类继承中的访问类型的改变">
-<meta property="og:url" content="http://example.com/2021/11/17/C-%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98/index.html">
+<meta property="og:title" content="Linux图形界面框架简介">
+<meta property="og:url" content="http://example.com/2023/03/28/Linux%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="HaoDuck个人博客">
-<meta property="og:description" content="类继承一般形式： 12345678910&#x2F;&#x2F;基类class Animal &amp;#123;    &#x2F;&#x2F; eat() 函数    &#x2F;&#x2F; sleep() 函数&amp;#125;;&#x2F;&#x2F;派生类class Dog : public Animal &amp;#123;    &#x2F;&#x2F; bark() 函数&amp;#125;;  继承中的特点有public, protected, private三种继承方式，它们相应地改变了基类成员的访问属">
+<meta property="og:description" content="关于linux两大图形界面KDE和GnomeKDE早于Gnome出现，但是KDE基于的Qt是不遵循GPL开源协议的，Qt是一个跨平台的C++图形用户界面库 ，它是挪威TrollTech公司的产品(2008年底被NOKIA收购)。 Qt具有优良的跨平台特性（支持Windows、Linux、各种UNIX、OS390和QNX等）、面向对象机制以及丰富的API，同时也可支持2D&#x2F;3D渲染和Ope">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-17T03:01:08.000Z">
-<meta property="article:modified_time" content="2021-11-17T03:07:16.380Z">
+<meta property="article:published_time" content="2023-03-28T08:08:42.000Z">
+<meta property="article:modified_time" content="2023-03-28T08:13:15.540Z">
 <meta property="article:author" content="HaoDuck">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>C++类继承中的访问类型的改变 - HaoDuck个人博客</title>
+  <title>Linux图形界面框架简介 - HaoDuck个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -196,7 +196,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C++类继承中的访问类型的改变"></span>
+            <span id="subtitle" data-typed-text="Linux图形界面框架简介"></span>
           
         </div>
 
@@ -207,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-11-17 11:01" pubdate>
-          2021年11月17日 上午
+        <time datetime="2023-03-28 16:08" pubdate>
+          2023年3月28日 下午
         </time>
       </span>
     
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          503 字
+          1.1k 字
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          5 分钟
+          10 分钟
         
       </span>
     
@@ -268,21 +268,15 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C++类继承中的访问类型的改变</h1>
+            <h1 style="display: none">Linux图形界面框架简介</h1>
             
             
               <div class="markdown-body">
                 
-                <p>类继承一般形式：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">//基类</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> &#123;</span><br>    <span class="hljs-comment">// eat() 函数</span><br>    <span class="hljs-comment">// sleep() 函数</span><br>&#125;;<br><br><span class="hljs-comment">//派生类</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Dog</span> :</span> public Animal &#123;<br>    <span class="hljs-comment">// bark() 函数</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>继承中的特点<br>有public, protected, private三种继承方式，它们相应地改变了基类成员的访问属性。</p>
-<p>1.public 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：public, protected, private</p>
-<p>2.protected 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：protected, protected, private</p>
-<p>3.private 继承：基类 public 成员，protected 成员，private 成员的访问属性在派生类中分别变成：private, private, private</p>
-<p>但无论哪种继承方式，上面两点都没有改变：</p>
-<p>1.private 成员只能被本类成员（类内）和友元访问，不能被派生类访问；</p>
-<p>2.protected 成员可以被派生类访问。</p>
+                <h2 id="关于linux两大图形界面KDE和Gnome"><a href="#关于linux两大图形界面KDE和Gnome" class="headerlink" title="关于linux两大图形界面KDE和Gnome"></a>关于linux两大图形界面KDE和Gnome</h2><p>KDE早于Gnome出现，但是KDE基于的Qt是不遵循GPL开源协议的，Qt是一个跨平台的C++图形用户界面库 ，它是挪威TrollTech公司的产品(2008年底被NOKIA收购)。 Qt具有优良的跨平台特性（支持Windows、Linux、各种UNIX、OS390和QNX等）、面向对象机制以及丰富的API，同时也可支持2D&#x2F;3D渲染和OpenGL API。在当时的同类图形用户界面库产品中，Qt的功能最为强大.但底层的基础 Qt却是一个不遵循GPL的商业软件，这就给KDE上了一道无形的枷锁并带来可能的法律风险。一大批自由程序员对KDE项目的决定深为不满，它们认为利用非自由软件开发违背了GPL的精神。于是这些GNU的狂热信徒兵分两路：其中一部分人去制作Harmonny，试图重写出一套兼容Qt的替代品，这个项目虽然技术上相对简单，但却没有获得KDE项目的支持；另一路人马则决定重新开发一套名为“GNOME（GNU Network Object Environment）”的图形环境来替代KDE。</p>
+<p>GNOME选择完全遵循GPL的GTK图形界面库为基础，因此我们也一般将GNOME和KDE两大阵营称为GNOME&#x2F;GTK和 KDE&#x2F;Qt。与Qt基于C++语言不同，GTK采用较传统的C语言 ，虽然C语言不支持面向对象设计，看起来比较落后，但当时熟悉C语言的开发者远远多于熟悉C++的开发者。加之GNOME&#x2F;GTK完全遵循GPL版权公约，吸引了更多的自由程序员参与。</p>
+<h2 id="linux-x2F-unix基于X-window的图形显示处理原理"><a href="#linux-x2F-unix基于X-window的图形显示处理原理" class="headerlink" title="linux&#x2F;unix基于X window的图形显示处理原理"></a>linux&#x2F;unix基于X window的图形显示处理原理</h2><p>X Window从逻辑上分为三层：最底层的X Server（X服务器）主要处理输入&#x2F;输出信息并维护相关资源，它接受来自键盘、鼠标的操作并将它交给X Client（X客户端）作出反馈，而由X Client传来的输出信息也由它来负责输出；最外层的X Client则提供一个完整的GUI界面，负责与用户的直接交互（KDE、Gnome都是一个X Client），而衔接X Server与X Client的就是“X Protocol(X通讯协议)”、它的任务是充当这两者的沟通管道。尽管UNIX厂商采用相同的X Window，但终端的X Client并不相同。</p>
+<h2 id="Qt、GTK-和KDE、GNOME的关系"><a href="#Qt、GTK-和KDE、GNOME的关系" class="headerlink" title="Qt、GTK 和KDE、GNOME的关系"></a>Qt、GTK 和KDE、GNOME的关系</h2><p>简单来说：为了方便开发人员编写X clients，就有了Xlib来封装X协议；Xlib还不够方便，于是就有了qt和gtk，它们提供了很多窗口控件（widgets）。<br>为了方便用户 ，就出现了gnome和kde等桌面管理系统。一般来说，linux用户看到的界面就是其中之一了。gnome用的是gtk库，kde用的是qt库。</p>
 
                 
               </div>
@@ -300,8 +294,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C++类继承中的访问类型的改变</div>
-      <div>http://example.com/2021/11/17/C-类继承中的访问类型的改变/</div>
+      <div>Linux图形界面框架简介</div>
+      <div>http://example.com/2023/03/28/Linux图形界面框架简介/</div>
     </div>
     <div class="license-meta">
       
@@ -313,7 +307,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年11月17日</div>
+          <div>2023年3月28日</div>
         </div>
       
       
@@ -345,18 +339,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/03/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97/" title="数据结构之时间复杂度计算">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构之时间复杂度计算</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/12/%E3%80%8AFreeRTOS%E4%BA%8C%E3%80%8B/" title="《FreeRTOS二》">
-                        <span class="hidden-mobile">《FreeRTOS二》</span>
+                      <a href="/2023/03/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97/" title="数据结构之时间复杂度计算">
+                        <span class="hidden-mobile">数据结构之时间复杂度计算</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
